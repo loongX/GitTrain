@@ -255,3 +255,59 @@ git fetch -p
 ```
  git remote show origin 
 ```
+
+###  十、打标签
+
+列出现有标签
+
+```
+$ git tag
+$ git tag -l 'v1.4.2.*'
+```
+
+新建标签
+
+创建一个含附注类型的标签
+
+```
+$ git tag -a v1.4 -m 'my version 1.4'
+```
+
+ `-m` 选项则指定了对应的标签说明，Git 会将此说明一同保存在标签对象中。如果没有给出该选项，Git 会启动文本编辑软件供你输入标签说明。
+
+查看标签
+
+```
+git show v1.5
+```
+
+轻量级标签
+
+ `-a`，`-s`或 `-m` 选项都不用，直接给出标签名字即可
+
+```
+$ git tag v1.4
+```
+
+后期对早先的某次提交加注标签
+
+```
+$ git log --pretty=oneline #展示的提交历史
+
+$ git tag -a v1.2 9fceb02
+```
+
+分享标签
+
+默认情况下，`git push` 并不会把标签传送到远端服务器上，只有通过显式命令才能分享标签到远端仓库。其命令格式如同推送分支，运行 `git push origin [tagname]` 即可
+
+```
+$ git push origin v1.5
+```
+
+一次推送所有本地新增的标签上去
+
+```
+$ git push origin --tags
+```
+
