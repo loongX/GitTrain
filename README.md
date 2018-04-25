@@ -311,3 +311,21 @@ $ git push origin v1.5
 $ git push origin --tags
 ```
 
+### 十一、图形化查看
+
+cd进目录里面然后打开gitk
+
+```
+$ gitk [git log options]
+```
+
+查看其它分支
+
+```
+$ gitk dev
+```
+gitk 是 git gui 中的一个小工具
+```
+$ git gui
+```
+
