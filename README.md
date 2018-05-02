@@ -256,6 +256,26 @@ git fetch -p
  git remote show origin 
 ```
 
+git remote show命令加上主机名，可以查看该主机的详细信息。
+
+```
+$ git remote show <主机名>
+```
+git remote add命令用于添加远程主机。
+
+```
+$ git remote add <主机名> <网址>
+```
+git remote rm命令用于删除远程主机。
+
+```
+$ git remote rm <主机名>
+```
+git remote rename命令用于远程主机的改名。
+
+```
+$ git remote rename <原主机名> <新主机名>
+```
 ###  十、打标签
 
 列出现有标签
@@ -327,5 +347,59 @@ $ gitk dev
 gitk 是 git gui 中的一个小工具
 ```
 $ git gui
+```
+
+
+
+### 12、 git pull
+
+```
+$ git pull <远程主机名> <远程分支名>:<本地分支名>
+```
+远程分支是与当前分支合并
+```
+$ git pull origin next
+```
+上面命令表示，取回origin/next分支，再与当前分支合并。实质上，这等同于先做git fetch，再做git merge。
+
+```
+$ git fetch origin
+$ git merge origin/next
+```
+手动建立追踪关系
+```
+git branch --set-upstream master origin/next
+```
+### 13. git push
+
+```
+$ git push <远程主机名> <本地分支名>:<远程分支名>
+```
+
+不管是否存在对应的远程分支，将本地的所有分支都推送到远程主机
+
+```
+$ git push --all origin
+```
+
+如果远程主机的版本比本地版本更新，推送时Git会报错，要求先在本地做`git pull`合并差异，然后再推送到远程主机。这时，如果你一定要推送，可以使用`--force`选项。
+
+```
+$ git push --force origin 
+```
+
+使用`--force`选项，会使远程主机上更新的版本被覆盖。除非你很确定要这样做，否则应该尽量避免使用`--force`选项。
+
+`git push`不会推送标签（tag），需要用`--tags`选项来提交所有tag。
+
+```
+$ git push origin --tags
+```
+删除远程分支
+```
+#省略本地分支名，则表示删除指定的远程分支，等同于推送一个空的本地分支到远程分支
+$ git push origin :master 
+# 等同于
+$ git push origin --delete master
 ```
 
