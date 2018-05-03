@@ -554,3 +554,45 @@ SSH协议还有另一种写法。
 > ```
 
 通常来说，Git协议下载速度最快，SSH协议用于需要用户认证的场合。各种协议优劣的详细讨论请参考[官方文档](http://git-scm.com/book/en/Git-on-the-Server-The-Protocols)。
+
+
+
+## 17. git diff
+
+
+工作目录 vs 暂存区
+```
+$ git diff <filename>
+```
+意义：查看文件在工作目录与暂存区的差别。如果还没 add 进暂存区，则查看文件自身修改前后的差别。也可查看和另一分支的区别。
+```
+$ git diff <branch> <filename>
+暂存区 vs Git仓库
+git diff --cached <filename>
+```
+意义：表示查看已经 add 进暂存区但是尚未 commit 的内容同最新一次 commit 时的内容的差异。 也可以指定仓库版本：
+```
+git diff --cached <commit> <filename>
+```
+工作目录 vs Git仓库
+```
+git diff <commit> <filename>
+```
+意义：查看工作目录同Git仓库指定 commit 的内容的差异。
+<commit>=HEAD 时：查看工作目录同最近一次 commit 的内容的差异。
+
+Git仓库 vs Git仓库
+```
+git diff <commit> <commit>
+```
+意义：Git仓库任意两次 commit 之间的差别。
+
+扩展：
+以上命令可以不指定 <filename>，则对全部文件操作。
+以上命令涉及和 Git仓库 对比的，均可指定 commit 的版本。
+```
+HEAD 最近一次 commit
+HEAD^ 上次提交
+HEAD~100 上100次提交
+每次提交产生的哈希值
+```
