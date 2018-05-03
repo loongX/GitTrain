@@ -85,28 +85,14 @@ $ git push origin --delete master
 
 上面命令表示，克隆的时候，指定远程主机叫做jQuery。
 
-`git remote show`命令加上主机名，可以查看该主机的详细信息。
-
  ```
- $ git remote show <主机名>
- ```
-
-`git remote add`命令用于添加远程主机。
-
- ```
- $ git remote add <主机名> <网址>
- ```
-
-`git remote rm`命令用于删除远程主机。
-
- ```
- $ git remote rm <主机名>
- ```
-
-`git remote rename`命令用于远程主机的改名。
-
- ```
- $ git remote rename <原主机名> <新主机名>
+ $ git remote show <主机名> 		 		 #查看该主机的详细信息
+ 
+ $ git remote add <主机名> <网址>  		    #用于添加远程主机
+ 
+ $ git remote rm <主机名> 			 	     #用于删除远程主机。
+ 
+ $ git remote rename <原主机名> <新主机名> 	  #远程主机的改名。
  ```
 
 ### 15. git fetch
