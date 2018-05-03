@@ -54,7 +54,7 @@ $ git push origin :master
 $ git push origin --delete master
 ```
 
-## 14. git remote
+### 14. git remote
 
 为了便于管理，Git要求每个远程主机都必须指定一个主机名。`git remote`命令就用于管理主机名。
 
@@ -109,7 +109,7 @@ $ git push origin --delete master
  $ git remote rename <原主机名> <新主机名>
  ```
 
-## 15. git fetch
+### 15. git fetch
 
 一旦远程主机的版本库有了更新（Git术语叫做commit），需要将这些更新取回本地，这时就要用到`git fetch`命令。
 
@@ -166,7 +166,7 @@ $ git push origin --delete master
 
 上面命令表示在当前分支上，合并`origin/master`。
 
-## 16. git clone
+### 16. git clone
 
 远程操作的第一步，通常是从远程主机克隆一个版本库，这时就要用到`git clone`命令。
 
@@ -206,10 +206,256 @@ SSH协议还有另一种写法。
 
 通常来说，Git协议下载速度最快，SSH协议用于需要用户认证的场合。各种协议优劣的详细讨论请参考[官方文档](http://git-scm.com/book/en/Git-on-the-Server-The-Protocols)。
 
+### 八、删除掉没有与远程分支对应的本地分支
+
+从gitlab上看不到的分支在本地可以通过git branch -a 查到，删掉没有与远程分支对应的本地分支：
+
+```
+git fetch -p
+```
+
+
+
+### 九、查看远程库的一些信息，及与本地分支的信息
+
+```
+ git remote show origin 
+
+```
+
+git remote show命令加上主机名，可以查看该主机的详细信息。
+
+```
+$ git remote show <主机名>
+
+```
+
+git remote add命令用于添加远程主机。
+
+```
+$ git remote add <主机名> <网址>
+
+```
+
+git remote rm命令用于删除远程主机。
+
+```
+$ git remote rm <主机名>
+
+```
+
+git remote rename命令用于远程主机的改名。
+
+```
+$ git remote rename <原主机名> <新主机名>
+```
 
 
 
 ## 二、版本控制
+
+### 二、 解决冲突
+
+**1、发生冲突的文件**
+
+```
+<<<<<<< HEAD
+Creating a new branch is quick & simple.
+=======
+Creating a new branch is quick AND simple.
+>>>>>>> feature1
+
+```
+
+其中，git使用<<<<<<<，=======，>>>>>>>标记文件中自己和别人产生冲突的部分。
+
+在<<<<<<<，=======之间为自己的代码；
+=======，>>>>>>>之间为别人的代码。
+
+如果保留自己的代码，将别人的代码删掉即可。
+
+**2、冲突解决后提交**
+
+```
+git status
+
+git add ***
+
+git commit -m "fix conflict"
+
+git push origin 分支名
+
+```
+
+### 
+
+### 五、撤销修改
+
+**1、撤销修改**
+
+```
+git  checkout -- a.html
+
+```
+
+> 分两种情况分析：
+
+```
+①： 还没有执行 git add 操作，执行上面的操作后，会恢复到和版本库中一模一样的版本状态。
+
+②： 执行了git add ，还没执行 git commit ,再执行上面的操作后，会恢复到git add 结束后的状态
+
+```
+
+注：一旦执行了git commit -m "***"，就不能再使用上面的命令回退。
+
+**2、撤销新建文件**
+
+比如新建一个aa.html页面，并未执行git add ,即没有被git追踪，此时如果你想撤销新建动作，可执行：
+
+```
+git clean -f ../aa.html
+
+```
+
+**3、撤销新建文件夹**
+
+比如新建一个文件夹"demo"，并未执行git add ,即没有被git追踪，此时如果你想撤销新建动作，可执行：
+
+```
+git clean -df ./demo
+  
+
+```
+
+### 六、对于已经push的版本，进行回退
+
+**1、第一步：**
+
+```
+git reset --hard 版本号 //本地回退到指定的版本
+
+```
+
+**2、第二步：**
+
+```
+git push  -f origin dev    //将远程的也回退到指定版本
+```
+
+
+
+### 17. git diff
+
+工作目录 vs 暂存区
+
+```
+$ git diff <filename>
+
+```
+
+意义：查看文件在工作目录与暂存区的差别。如果还没 add 进暂存区，则查看文件自身修改前后的差别。也可查看和另一分支的区别。
+
+```
+$ git diff <branch> <filename>
+暂存区 vs Git仓库
+git diff --cached <filename>
+
+```
+
+意义：表示查看已经 add 进暂存区但是尚未 commit 的内容同最新一次 commit 时的内容的差异。 也可以指定仓库版本：
+
+```
+git diff --cached <commit> <filename>
+
+```
+
+工作目录 vs Git仓库
+
+```
+git diff <commit> <filename>
+
+```
+
+意义：查看工作目录同Git仓库指定 commit 的内容的差异。
+<commit>=HEAD 时：查看工作目录同最近一次 commit 的内容的差异。
+
+Git仓库 vs Git仓库
+
+```
+git diff <commit> <commit>
+
+```
+
+意义：Git仓库任意两次 commit 之间的差别。
+
+扩展：
+以上命令可以不指定 <filename>，则对全部文件操作。
+以上命令涉及和 Git仓库 对比的，均可指定 commit 的版本。
+
+```
+HEAD 最近一次 commit
+HEAD^ 上次提交
+HEAD~100 上100次提交
+每次提交产生的哈希值
+
+```
+
+### 十一、图形化查看
+
+cd进目录里面然后打开gitk
+
+```
+$ gitk [git log options]
+
+```
+
+查看其它分支
+
+```
+$ gitk dev
+
+```
+
+gitk 是 git gui 中的一个小工具
+
+```
+$ git gui
+
+```
+
+
+
+### 四、版本回退
+
+**1、回退至上一个版本**
+
+```
+git reset --hard HEAD 
+
+```
+
+**2、回退至指定版本**
+
+```
+git reset --hard  版本号
+
+```
+
+**3、查看以往版本号(本地的commit)**
+
+```
+git reflog
+
+```
+
+**4、查看各版本号及信息(所有的commit：本地commit + 其他同事的commit)**
+
+```
+git log
+```
+
+### 
 
 ##三、分支管理
 ### 3.1、 创建与合并分支
@@ -306,52 +552,13 @@ git branch -D   issues1234  //本地强制删除分支issues1234
 git push origin  :issues1234  //推到远程
 ```
 
-##四、 标签管理
-
-
-
-
-
-
-
-
-### 二、 解决冲突
-
-**1、发生冲突的文件**
-
-```
-<<<<<<< HEAD
-Creating a new branch is quick & simple.
-=======
-Creating a new branch is quick AND simple.
->>>>>>> feature1
-```
-
-其中，git使用<<<<<<<，=======，>>>>>>>标记文件中自己和别人产生冲突的部分。
-
-在<<<<<<<，=======之间为自己的代码；
-=======，>>>>>>>之间为别人的代码。
-
-如果保留自己的代码，将别人的代码删掉即可。
-
-**2、冲突解决后提交**
-
-```
-git status
-
-git add ***
-
-git commit -m "fix conflict"
-
-git push origin 分支名
-```
-
 ### 三、Bug分支
 
 **1、储藏更改:将当前更改的代码储藏起来，等以后恢复使用**
 
 ```
 git stash
+
 ```
 
 **2、恢复储藏的代码**
@@ -367,12 +574,14 @@ git stash drop //在上面操作的基础上，以此来删除stash
 
 
 注： git stash list //查看全部的stash列表
+
 ```
 
 **3、将stash空间清空**
 
 ```
 git stash clear
+
 ```
 
 **4、git stash pop 和 git stash apply 区别**
@@ -380,130 +589,21 @@ git stash clear
 ```
 原来git stash pop stash@{id}命令会在执行后将对应的stash id 从stash list里删除，
 而 git stash apply stash@{id} 命令则会继续保存stash id。
-```
-
-### 四、版本回退
-
-**1、回退至上一个版本**
 
 ```
-git reset --hard HEAD 
-```
 
-**2、回退至指定版本**
+### 
 
-```
-git reset --hard  版本号
-```
+##四、 标签管理
 
-**3、查看以往版本号(本地的commit)**
-
-```
-git reflog
-```
-
-**4、查看各版本号及信息(所有的commit：本地commit + 其他同事的commit)**
-
-```
-git log
-```
-
-### 五、撤销修改
-
-**1、撤销修改**
-
-```
-git  checkout -- a.html
-```
-
-> 分两种情况分析：
-
-```
-①： 还没有执行 git add 操作，执行上面的操作后，会恢复到和版本库中一模一样的版本状态。
-
-②： 执行了git add ，还没执行 git commit ,再执行上面的操作后，会恢复到git add 结束后的状态
-```
-
-注：一旦执行了git commit -m "***"，就不能再使用上面的命令回退。
-
-**2、撤销新建文件**
-
-比如新建一个aa.html页面，并未执行git add ,即没有被git追踪，此时如果你想撤销新建动作，可执行：
-
-```
-git clean -f ../aa.html
-```
-
-**3、撤销新建文件夹**
-
-比如新建一个文件夹"demo"，并未执行git add ,即没有被git追踪，此时如果你想撤销新建动作，可执行：
-
-```
-git clean -df ./demo
-  
-```
-
-### 六、对于已经push的版本，进行回退
-
-**1、第一步：**
-
-```
-git reset --hard 版本号 //本地回退到指定的版本
-```
-
-**2、第二步：**
-
-```
-git push  -f origin dev    //将远程的也回退到指定版本
-```
-
-### 七、本地同步远程删除的分支
-
-```
-git fetch origin -p  //用来清除已经没有远程信息的分支，这样git branch -a 就不会拉取远程已经删除的分支了
-```
-
-### 八、删除掉没有与远程分支对应的本地分支
-
-从gitlab上看不到的分支在本地可以通过git branch -a 查到，删掉没有与远程分支对应的本地分支：
-
-```
-git fetch -p
-```
-
-### 九、查看远程库的一些信息，及与本地分支的信息
-
-```
- git remote show origin 
-```
-
-git remote show命令加上主机名，可以查看该主机的详细信息。
-
-```
-$ git remote show <主机名>
-```
-git remote add命令用于添加远程主机。
-
-```
-$ git remote add <主机名> <网址>
-```
-git remote rm命令用于删除远程主机。
-
-```
-$ git remote rm <主机名>
-```
-git remote rename命令用于远程主机的改名。
-
-```
-$ git remote rename <原主机名> <新主机名>
-```
-###  十、打标签
+### 十、打标签
 
 列出现有标签
 
 ```
 $ git tag
 $ git tag -l 'v1.4.2.*'
+
 ```
 
 新建标签
@@ -512,6 +612,7 @@ $ git tag -l 'v1.4.2.*'
 
 ```
 $ git tag -a v1.4 -m 'my version 1.4'
+
 ```
 
  `-m` 选项则指定了对应的标签说明，Git 会将此说明一同保存在标签对象中。如果没有给出该选项，Git 会启动文本编辑软件供你输入标签说明。
@@ -520,6 +621,7 @@ $ git tag -a v1.4 -m 'my version 1.4'
 
 ```
 git show v1.5
+
 ```
 
 轻量级标签
@@ -528,6 +630,7 @@ git show v1.5
 
 ```
 $ git tag v1.4
+
 ```
 
 后期对早先的某次提交加注标签
@@ -536,6 +639,7 @@ $ git tag v1.4
 $ git log --pretty=oneline #展示的提交历史
 
 $ git tag -a v1.2 9fceb02
+
 ```
 
 分享标签
@@ -544,74 +648,28 @@ $ git tag -a v1.2 9fceb02
 
 ```
 $ git push origin v1.5
+
 ```
 
 一次推送所有本地新增的标签上去
 
 ```
 $ git push origin --tags
-```
-
-### 十一、图形化查看
-
-cd进目录里面然后打开gitk
 
 ```
-$ gitk [git log options]
-```
 
-查看其它分支
-
-```
-$ gitk dev
-```
-gitk 是 git gui 中的一个小工具
-```
-$ git gui
-```
+### 
 
 
 
 
-## 17. git diff
 
+### 七、本地同步远程删除的分支
 
-工作目录 vs 暂存区
 ```
-$ git diff <filename>
+git fetch origin -p  //用来清除已经没有远程信息的分支，这样git branch -a 就不会拉取远程已经删除的分支了
 ```
-意义：查看文件在工作目录与暂存区的差别。如果还没 add 进暂存区，则查看文件自身修改前后的差别。也可查看和另一分支的区别。
-```
-$ git diff <branch> <filename>
-暂存区 vs Git仓库
-git diff --cached <filename>
-```
-意义：表示查看已经 add 进暂存区但是尚未 commit 的内容同最新一次 commit 时的内容的差异。 也可以指定仓库版本：
-```
-git diff --cached <commit> <filename>
-```
-工作目录 vs Git仓库
-```
-git diff <commit> <filename>
-```
-意义：查看工作目录同Git仓库指定 commit 的内容的差异。
-<commit>=HEAD 时：查看工作目录同最近一次 commit 的内容的差异。
 
-Git仓库 vs Git仓库
-```
-git diff <commit> <commit>
-```
-意义：Git仓库任意两次 commit 之间的差别。
-
-扩展：
-以上命令可以不指定 <filename>，则对全部文件操作。
-以上命令涉及和 Git仓库 对比的，均可指定 commit 的版本。
-```
-HEAD 最近一次 commit
-HEAD^ 上次提交
-HEAD~100 上100次提交
-每次提交产生的哈希值
-```
 
 
 
