@@ -596,3 +596,370 @@ HEAD^ 上次提交
 HEAD~100 上100次提交
 每次提交产生的哈希值
 ```
+
+
+
+
+----------------------------------------快捷方式---------------------------------------------------------------- 
+下面的命令会修改.git/config文件 
+
+1、git st 代表 git status 
+设置命令：git config --system alias.st status 
+
+2、git ci 代表 git commit 
+设置命令：git config --system alias.ci commit 
+3、git co 代表 git checkout 
+设置命令：git config --system alias.co checkout 
+4、git br 代表 git branch 
+设置命令：git config --system alias.br branch 
+----------------------------------------Linux常识---------------------------------------------------------------- 
+
+1、echo "test" >> test.txt                     //追加test字符串到test.txt文件中 
+2、touch命令                                   //修改时间戳 
+3、cat                                         //查看文件内容 
+4、netstat -tunpl 
+
+----------------------------------------查看git配置文件----------------------------------------------------------- 
+
+1、git show --help      //git查看帮助文档 
+
+----------------------------------------查看git配置文件----------------------------------------------------------- 
+
+1、查看git配置文件 
+cat .git/config 
+结果如下： 
+[core] 
+        repositoryformatversion = 0 
+        filemode = false 
+        logallrefupdates = true 
+        autocrlf = false 
+        bare = false 
+        hideDotFiles = dotGitOnly 
+[remote "origin"] 
+        url = git@10.4.63.37:/niux_crmv3_web 
+        fetch = +refs/heads/*:refs/remotes/origin/* 
+[branch "master"] 
+        remote = origin 
+        merge = refs/heads/master 
+[branch "test"] 
+        remote = origin 
+        merge = refs/heads/test 
+[branch "dev"] 
+        remote = origin 
+        merge = refs/heads/master 
+
+Administrator@0251-00222 /e/workspace_eclipse_git/niux_crmv3_web (test) 
+
+2、查看配置文件中某参数的值 
+git config branch.test.remote 
+结果如下：origin 
+
+----------------------------------------远端仓库---------------------------------------------------------------- 
+1、修改远程仓库URL 
+git remote set-url server git@10.4.63.37:/niux_crmv3_web 
+
+2、查看远程连接的是哪个仓库 
+git remove -v 
+
+3、修改远端分支名称 
+在使用git branch -r时，会显示远端所有的分支，如下所示： 
+$ git branch -r 
+  origin/master 
+  origin/release 
+这个origin的名字就代表了远端，而/后面的master和release则代表的远端分支的真正名称，如果看着origin不爽，可以将origin修改为server： 
+git remote rename origin server 
+$ git branch -m bug-2.1.0 f-1.1.9  //修改本地分支名称 
+
+4、同步服务器上的远端分支修改，当远端分支、tag发生变动后，使用此命令会将变动同步到本地 
+git remote prune origin 
+
+----------------------------------------本地仓库----------------------------------------------------------------- 
+1、导出工程 
+git clone git@10.208.146.21/gitserver/niux_crm_server 
+git remote set-url origin http://10.208.146.21/gitserver/niux_crmv3_web  //修改git库远程地址 
+
+2、git add -i                                 //进入交互式界面(感觉这个比较爽) 
+
+3、git add -A                                 //将本地改动全部记录到暂存区(这个很有用) 
+
+4、git add -u                                 //将被版本库跟踪的本地文件变更(修改、删除)全部记录到暂存区 
+
+5、git add -f                                 //将强制添加的版本控制中，防止错误的ignore    
+
+6、git rm -f 文件                             //强制删除文件，会清空暂存区和本地工作空间 
+   git rm --cached 文件                       //只会清空暂存区文件 
+
+7、git mv old文件名 new文件名                 //修改文件名称 
+
+8、远程创建了一个新仓库，本地创建了一个新项目，如何使新的项目与仓库对应起来? 
+
+1)切换到本地新项目中 
+2)将本地项目与远端新仓库(git@10.4.63.37:/niux_crmv3_web)关联 
+git remote add origin git@10.4.63.37:/niux_crmv3_web 
+
+----------------------------------------分支的查看----------------------------------------------------------------- 
+1、查看本地、远端所有分支 
+git branch -a 
+
+2、查看本地所有分支 
+git branch 
+
+3、查看远端所有分支 
+git branch -r 
+
+4、查看分支详细信息 
+git branch -v 
+
+5、查看所有分支详细信息 
+git branch -av 
+
+----------------------------------------分支的切换----------------------------------------------------------------- 
+
+1、切换本地分支 
+git checkout test                             //切换到本地的test分支 
+
+----------------------------------------分支的创建----------------------------------------------------------------- 
+
+1、创建本地分支，将远端test分支拉到本地，然后创建本地分支test(注：前提是本地不存在test分支) 
+git checkout -b test origin/test 
+
+2、创建本地分支，根据本地的master分支，重新创建一个本地分支local_test 
+git checkout -b local_test master 
+
+----------------------------------------删除分支------------------------------------------------------------------- 
+
+1、删除本地分支 
+git branch -d test 
+
+2、删除本地分支，强制删除 
+git branch -D test 
+
+3、删除远端分支 
+git remote rm branch 
+
+4、删除远端分支test 
+git push origin :test 
+
+----------------------------------------分支的更新-------------------------------------------------------------------- 
+
+1、git  pull 远端项目路径 远端分支名:本地分支名 
+示例：git pull origin remotebranch1              //将远端分支remotebranch1更新到本地分支 
+
+2、git fetch origin master                    //相当于是从远程获取最新版本到本地，不会自动merge 
+
+
+----------------------------------------提交----------------------------------------------------------------- 
+
+1、git push origin test:master                // 提交本地test分支作为远程的master分支 
+2、git push origin test:test                  // 提交本地test分支作为远程的test分支 
+
+
+----------------------------------------分支的提交-------------------------------------------------------------------- 
+
+1、提交本地的分支到远端分支(远端分支若不存在，则创建) 
+git push origin 本地分支:服务器分支           //提交本地分支到服务器分支 
+
+2、如果本地分支与服务器分支名称相同，则可以写为 
+git push origin "branch_name" 
+
+----------------------------------------分支合并---------------------------------------------------------------------- 
+
+1、用法：git pull 合并的目标分支 合并的来源分支 
+   示例：git pull . dev~2（合并当前分支和dev~2分支） 
+
+
+2、git rebase 
+示例： 
+git rebase test1 
+git add . 
+git rebase --continue 
+git push origin test:test1 
+
+----------------------------------------checkout 回退工作空间----------------------------------------------------------- 
+
+说明：checkout命令用于回退文件时，主要用于将工作空间回退到暂存区的某个版本 
+
+1、将工作空间的test1.txt文件回退到暂存区版本 
+git checkout test1.txt 
+
+2、将工作空间的test1.txt文件回退到版本库当前版本，也同时回退暂存区 
+git checkout HEAD test1.txt 
+
+3、将工作空间的test1.txt文件回退到版本库当前版本前2个版本，也同时回退暂存区 
+git checkout HEAD~2 test1.txt 
+
+4、将工作空间的test1.txt文件回退到branch1分支当前版本，也同时回退暂存区 
+git checkout branch1 test1.txt 
+
+5、用暂存区的所有文件替换工作空间所有文件(非常危险) 
+git checkout . 
+
+6、查看服务器分支的提交日志(进入到detached状态) 
+git chockout origin/master 
+git log --graph --online 
+
+----------------------------------------reset 回退暂存区----------------------------------------------------------------- 
+
+1、git reset HEAD [文件]<==>git reset [文件]      //用HEAD替换暂存区中的内容(不重置index，也不改变工作区，只是将暂存区的文件从当前版本改变为HEAD指向的版本) 
+其他形式如同：git reset 955ad1f [文件] 
+
+2、git reset --hard 955ad1f                   //先查看历史提交记录，然后将工作空间回退到HEAD对应的特定版本 
+上述命令执行以下三个步骤： 
+1)现将暂存区的index指向955ad1f 
+2)然后将955ad1f指向的内容放入暂存区 
+3)最后修改工作空间的内容与暂存区一致 
+
+结果显示如下： 
+$ git log --graph --oneline 
+* 7883905 tijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotijiaotij 
+* 8ec3732 test1.txt 
+* ea22921 add line 3 
+* b7d4e9e add line 2 
+* edef0d0 删除文件 
+* b127aec a.txt 增加1 
+* 6a85c78 提交a.txt 
+* 78d83ba Merge branch 'niux_crmv3_web_bizarea' 
+  |\ 
+  | *   305c9b3 Merge branch 'niux_crmv3_web_bizarea' 
+  | |\ 
+  | |/ 
+  | * d48399f 提交bizarea分支修改1 
+* | d1937cc 提交主分支修改1 
+  |/ 
+* deaa7e9 提交3 
+* cbe3500 提交2 
+* 955ad1f init 
+
+Administrator@0251-00222 /e/workspace_eclipse_git/niux_crmv3_web (local_test) 
+$ git reset --hard 955ad1f 
+HEAD is now at 955ad1f init 
+
+3、git reset --soft 955ad1f                      //只更改index的指向，不改变暂存区和工作空间的内容 
+   git reset --soft HEAD                         //引用退回到最新提交 
+   git reset --soft HEAD^                        //引用退回到最新提交的上一次提交，即删除最新提交 
+
+4、git reset --mixed 955ad1f(该参数为默认参数)   //修改index的指向，然后修改暂存区的内容 
+
+----------------------------------------git diff 比较-------------------------------------------------------------------- 
+工作空间就是workspace，暂存区就是.git/index，而HEAD指的是本地的Master或者分支 
+
+1、工作空间与暂存区进行比较 
+git diff 
+
+2、工作空间与HEAD进行比较 
+git diff HEAD 
+
+3、暂存区与HEAD进行比较 
+git diff --cached 
+
+4、比较两个版本的变化，只显示文件名 
+git diff --name-only [HEAD|--cached]               //中括号中的参数同1、2、3点中所述 
+
+5、文件不同版本间的比较 
+git diff <commit1> <commit2> -- <paths> 
+
+6、比较一个文件在两个tag之间的不同 
+git diff tag1:file tag2:file 
+
+----------------------------------------git tag-------------------------------------------------------------------- 
+
+1、git tag -a v1.5 -m '注释'                       // -a参数用来指定tag的名称 
+
+2、git tag                                         //查看本地tag 
+
+3、git push origin v1.5                            //提交tag到远端服务器 
+
+4、git tag -d tag名称                              //删除本地tag 
+
+5、push origin :服务器tag名称                      //删除服务器上的tag 
+
+----------------------------------------git 日志查看-------------------------------------------------------------------- 
+说明：日志查看，是查看HEAD对应的分支的提交记录 
+
+1、精简日志查看 
+git log --pretty=oneline 
+
+
+2、日志查看 
+git log -3 --graph --oneline [文件名]              //若后面带文件参数，则显示该文件的提交历史记录；若没有文件参数，则显示全部的提交记录；3表示最近的3条提交记录 
+
+3、git log --stat 
+stat仅简要的显示 文件 增改行数统计，每个提交都列出了修改过的文件，以及其中添加和移除的行数，并在最后列出所有增减行数小计。 
+
+4、git log pretty 选项，可以指定使用完全不同于默认格式的方式展示提交历史 
+选项	说明 
+%H	提交对象（commit）的完整哈希字串 
+%h	提交对象的简短哈希字串 
+%T	树对象（tree）的完整哈希字串 
+%t	树对象的简短哈希字串 
+%P	父对象（parent）的完整哈希字串 
+%p	父对象的简短哈希字串 
+%an	作者（author）的名字 
+%ae	作者的电子邮件地址 
+%ad	作者修订日期（可以用 -date= 选项定制格式） 
+%ar	作者修订日期，按多久以前的方式显示 
+%cn	提交者(committer)的名字 
+%ce	提交者的电子邮件地址 
+%cd	提交日期 
+%cr	提交日期，按多久以前的方式显示 
+%s	提交说明 
+
+git log --pretty=format:"%h - %an, %ar : %s"        //查看日志，显示简短hash、提交人、时间(以"几周以前"方式显示)、注释 
+
+git log --pretty=format:"%h - %an, %ad : %s"        //查看日志，显示简短hash、提交人、时间、注释 
+
+5、查看某个人的所有提交记录 
+git log --committer=tian.zheng --pretty=format:"%h - %an, %ar : %s" 
+
+6、git show查看某次提交的修改记录 
+git show hash码 --stat 
+
+7、显示本地文件状态 
+git status -s                                   //显示精简格式的输出状态 
+
+
+
+----------------------------------------git辅助工具-------------------------------------------------------------------- 
+1、保存git工作进度 
+git stash 
+
+2、查看当前HEAD指向哪个分支 
+cat .git/HEAD 
+结果如下: 
+ref: refs/heads/local_test 
+
+
+3、查看refs/heads/local_test中的内容 
+$ cat .git/refs/heads/local_test 
+结果如下: 
+7883905d38d1374012dde5bb0613bdc54a38d023 
+
+4、显示git hash值代表的类型 
+git cat-file -t 7883905d38d1374012dde5bb0613bdc54a38d023 
+结果如下： 
+commit 
+
+5、显示git hash值代表的内容 
+git cat-file -p 7883905d38d1374012dde5bb0613bdc54a38d023 
+结果如下： 
+tree 502303fcbcb586811647ddc4a630cdd8ac16eda9 
+parent 8ec373288dfb7f35d166f2b7069dbf53ed9793d7 
+author tian.zheng <tian.zheng@renren-inc.com> 1381829379 +0800 
+committer tian.zheng <tian.zheng@renren-inc.com> 1381829379 +0800 
+测试提交1 
+
+6、将引用显示为对应的提交ID 
+git rev-parse HEAD local_test 
+显示结果 
+429fb519cb9e97ffa65e90b00985bd49154b6f03 
+6b1120c4569ac7f132da78c6c63093fdb236fa35 
+
+7、git show HEAD~1:test1.txt                    //显示版本库HEAD前1个版本的test1.txt内容 
+   git show HEAD~4:test1.txt                    //显示版本库HEAD前4个版本的test1.txt内容 
+   git show HEAD~4:test1.txt  newtest1.txt      //将版本库HEAD前4个版本的test1.txt内容导出到新文件 
+
+
+8、git blame test1.txt                          //显示文件在什么时候，谁修改了什么东西 
+429fb519 (tian.zheng 2013-10-16 12:30:36 +0800 1) line1 
+6b1120c4 (tian.zheng 2013-10-16 12:31:15 +0800 2) line2
+
